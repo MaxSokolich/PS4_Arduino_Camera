@@ -2,7 +2,7 @@ from pySerialTransfer import pySerialTransfer as txfer
 from pySerialTransfer.pySerialTransfer import InvalidSerialPort
 import time
 
-class ArduinoHandler:
+class MyArduino:
     """
     Handles connections and messaging to an Arduino.
 
@@ -74,9 +74,9 @@ class ArduinoHandler:
             
 
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     PORT = "/dev/ttyACM0"
-    arduino = ArduinoHandler()
+    arduino = MyArduino()
     arduino.connect(PORT)
 
     arduino.send(0,0,0,3.1,90,10)
@@ -84,6 +84,6 @@ if __name__ == "__main__":
     time.sleep(5)
     arduino.send(0,0,0,0,0,0)
     print("zeroing")
-    arduino.close()
+    arduino.close()"""
     
     
