@@ -36,7 +36,7 @@ class MyCamera:
             cv2.imshow("im", frame)
            
         
-            if cv2.waitKey(10) & 0xFF == ord("q"):
+            if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
         
         cam.release()
