@@ -1,5 +1,6 @@
-from pyjoystick.sdl2 import Key, Joystick, run_event_loop
+from pyjoystick.sdl2 import Key, Joystick, run_event_loop, quit, stop_event_wait
 import numpy as np
+import time
 """
 if linux:
     RX = Axis 3
@@ -25,42 +26,43 @@ class MyController:
         self.acoustic_status = 0
         self.stop = 0
 
+    
+        self.message = []
+
         #initilze queue
         self.queue = None
         self.conn = None
         self.arduino = None
 
+
+        
+        
+
+        
     def print_add(self, joy):
         print('CONNECTING JOYSTICK', joy)
 
     def print_remove(self, joy):
         print('Removed', joy)
 
-    
-    def run(self, arduino):
-        #self.queue = joystick_q
+    def run(self, arduino, queue):
+        self.queue = queue
         #self.conn = conn
         self.arduino = arduino
         run_event_loop(self.print_add, self.print_remove, self.key_received)
+    
+        
 
     def key_received(self, key):
-        print('Key:', key)
+        #print('Key:', key)
+        
+
         
         #DISCONNECT
         if key == "Button 1":
             print("DISCONNECTING JOYSTICK")
             self.stop = 1
-            
-
-        #LEFT JOYSTICK ORIENT
-        if key == "Axis 0" or key == "-Axis 0":
-            self.left_stick[0] = round(key.value,3)
-            self.Bx = round(key.value,3)
-
-        if key == "Axis 1" or key == "-Axis 1":
-            self.left_stick[1] = -round(key.value,3)
-            self.By = -round(key.value,3)
-
+    
 
         #ACOUSTIC MODULE
         if key == "Button 0":
@@ -68,7 +70,7 @@ class MyController:
             
 
         #MAGNETIC FIELD SPIN
-        if key == "Button 2":
+        if key == "Button 3":
             if key.value == 1:
                 self.gamma = 0
                 self.freq = 10
@@ -78,13 +80,46 @@ class MyController:
 
 
         #MAGNETIC FIELD POSITIVE Z
-        if key == "Button 5":
+        if key == "Button 10":
             self.Bz = key.value
 
 
         #MAGNETIC FIELD NEGATIVE Z
-        if key == "Button 4":
-            self.Bz = -key.value
+        if key == "Button 9":
+            self.Bz = -key.value        
+       
+
+        #STAGE MOTOR POSITIVE X
+        if key == "Button 14":
+            self.Mx = key.value
+        
+        #STAGE MOTOR NEGATIVE X
+        if key == "Button 13":
+            self.Mx = -(key.value) 
+        
+        #STAGE MOTOR POSITIVE Y
+        if key == "Button 11":
+            self.My = key.value
+        
+        #STAGE MOTOR NEGATIVE Y
+        if key == "Button 12":
+            self.My = -(key.value)
+      
+
+
+
+
+
+
+        
+        #LEFT JOYSTICK ORIENT
+        if key == "Axis 1" or key == "-Axis 1":
+            #self.left_stick[0] = round(key.value,3)
+            self.Bx = round(key.value,3)
+
+        if key == "Axis 0" or key == "-Axis 0":
+            #self.left_stick[1] = -round(key.value,3)
+            self.By = -round(key.value,3)
 
 
         #RIGHT JOYSTICK ROLL
@@ -113,7 +148,7 @@ class MyController:
                 self.freq = int(np.sqrt((x)**2 + (y)**2)*20)
 
 
-        if key == "Axis 4" or key == "-Axis 4":
+        if key == "Axis 2" or key == "-Axis 2":
             self.right_stick[1] = -round(key.value,3)
             x = self.right_stick[0]
             y = self.right_stick[1]
@@ -137,41 +172,21 @@ class MyController:
                 self.gamma = np.pi/2
                 self.freq = int(np.sqrt((x)**2 + (y)**2)*20)
 
-        
-        if key != "Hat 0 [Centered]":
 
-            #STAGE MOTOR POSITIVE X
-            if key == "Hat 0 [Right]":
-                self.Mx = key.value-1
-            
-            #STAGE MOTOR NEGATIVE X
-            if key == "Hat 0 [Left]":
-                self.Mx = -(key.value-7) 
-            
-            #STAGE MOTOR POSITIVE Y
-            if key == "Hat 0 [Up]":
-                self.My = key.value
-            
-            #STAGE MOTOR NEGATIVE Y
-            if key == "Hat 0 [Down]":
-                self.My = -(key.value-3)
-        if key == "Hat 0 [Centered]":
-            self.Mx, self.My = 0,0
-        
         
         #STAGE MOTOR POSITIVE Z
         if key == "Axis 5":
             self.Mz = round(key.value,3)
         
         #STAGE MOTOR NEGATIVE Z
-        if key == "Axis 2":
+        if key == "Axis 4":
             self.Mz = -round(key.value,3)
 
 
-
-
         #PUT IT ALL TOGETHER
-        actions = [self.Bx, 
+        
+        
+        self.actions = [self.Bx, 
                    self.By,
                    self.Bz,
                    self.Mx, 
@@ -183,17 +198,37 @@ class MyController:
                    self.acoustic_status,
                    self.stop]
         
+        #self.message.append(self.actions)
+        
+        self.queue.put(self.actions)
+        
+
+        
+        #we dont want to put actions in the queue always 
+        
+
+        #self.counter +=1
+        #if (self.counter % 10) == 0:
+        
+        #time.sleep(50/1000)
+        #print(self.actions)
+
        
-        #self.queue.put(actions)
-       
-        #self.conn.send(actions)
-        Bx,By,Bz,Mx,My,Mz,alpha,gamma,freq,acoustic_status,stop = actions
-        #print(actions)
+        
+
+        Bx,By,Bz,Mx,My,Mz,alpha,gamma,freq,acoustic_status,stop = self.actions
+        
+      
         #self.arduino.send(Bx,By,Bz,alpha,gamma,freq)
 
         #EXIT CONDITION
         if self.stop == 1:
             Joystick.close()
-            self.arduino.send(0,0,0,0,0,0)
-            self.arduino.close()
+            #quit()
+            #stop_event_wait()
+            #self.arduino.send(0,0,0,0,0,0)
+            #self.arduino.close()
             #self.stop()
+
+"""Controller = MyController()
+Controller.run(None,None)"""

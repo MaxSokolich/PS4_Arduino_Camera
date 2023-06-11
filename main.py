@@ -1,6 +1,6 @@
 
 import multiprocessing
-from PS4 import MyController
+from PS4_Mac import MyController
 from Camera import MyCamera
 from Arduino import MyArduino
 
@@ -15,14 +15,19 @@ if __name__ == "__main__":
     arduino = MyArduino()
     arduino.connect(PORT)
 
+
+    #conn_send, conn_recv = multiprocessing.Pipe()
+    queue = multiprocessing.Queue()
+
+
     #connect and run joystick process
     Controller = MyController()
-    joystick_process = multiprocessing.Process(target = Controller.run, args = (arduino,))
+    joystick_process = multiprocessing.Process(target = Controller.run, args = (arduino,queue))
     
 
     #connect and run camera process
     Camera = MyCamera()
-    camera_process = multiprocessing.Process(target = Camera.run, args = (arduino,))
+    camera_process = multiprocessing.Process(target = Camera.run, args = (arduino,queue))
     
 
     #start both processes simutaneously
@@ -30,6 +35,8 @@ if __name__ == "__main__":
     joystick_process.start()
     camera_process.join()
     joystick_process.join()
+
+    
     
 
 
