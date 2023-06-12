@@ -30,6 +30,7 @@ class MyArduino:
                 self.conn = txfer.SerialTransfer(port)
                 self.port = port
                 self.conn.open()
+                time.sleep(5)
                 print(f" -- Arduino Connection initialized using port {port} --")
             except InvalidSerialPort:
                 print("Could not connect to arduino, disabling")

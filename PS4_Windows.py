@@ -54,11 +54,11 @@ class MyController:
                 #axis condition
                 if event.type == pygame.JOYAXISMOTION:
                     # Joystick movement event
-                    if event.axis == 0:  #LY
+                    if event.axis == 1:  #LY
                         ly = self.deadzone(event.value)
                         self.By = round(ly,3)
                      
-                    if event.axis == 1: #LX
+                    if event.axis == 0: #LX
                         lx = self.deadzone(event.value)
                         self.Bx = round(lx,3)
 
@@ -150,9 +150,9 @@ class MyController:
                    self.acoustic_status]
             
             #add action commands to queue
-            self.queue.put(self.actions)
+            #self.queue.put(self.actions)
             self.arduino.send(self.Bx,self.By,self.Bz, self.alpha, self.gamma, self.freq)
-             
-        
+           
+  
          
            

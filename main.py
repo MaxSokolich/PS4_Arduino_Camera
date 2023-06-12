@@ -1,7 +1,8 @@
 
 import multiprocessing
+import threading
 
-from PS4_Linux import MyController
+from PS4_Windows import MyController
 from Camera import MyCamera
 from Arduino import MyArduino
 
@@ -12,22 +13,24 @@ press Circle on controller to close controller
 
 if __name__ == "__main__":
     #connect to arduino
-    PORT = "/dev/ttyACM0"
+    PORT = "COM3"#"/dev/ttyACM0"
     arduino = MyArduino()
     arduino.connect(PORT)
 
     #create a queue to communicate information between seperate processes.
-    queue = multiprocessing.Queue(1)
+    queue = multiprocessing.Queue()
 
 
     #connect and run controller process
     Controller = MyController()
-    joystick_process = multiprocessing.Process(target = Controller.run, args = (arduino,queue))
+    #joystick_process = multiprocessing.Process(target = Controller.run, args = (arduino,queue))
+    joystick_process = threading.Thread(target = Controller.run, args = (arduino,queue))
     
 
     #connect and run camera process
     Camera = MyCamera()
-    camera_process = multiprocessing.Process(target = Camera.run, args = (arduino,queue))
+    #camera_process = multiprocessing.Process(target = Camera.run, args = (arduino,queue))
+    camera_process = threading.Thread(target = Camera.run, args = (arduino,queue))
 
 
     

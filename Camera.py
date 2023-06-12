@@ -24,13 +24,15 @@ class MyCamera:
 
 
         while True:
+            self.fps_counter.update()
             try:
                 event = queue.get(0)   #match this with the tracker commands to save input output data.
-                print("contents = ", event)
+                
             except Empty:
                 pass
             
-
+            
+            #tracker()
             success, frame = cam.read()
             cv2.putText(frame,str(int(self.fps_counter.get_fps())),(int(w / 40),int(h / 30)),cv2.FONT_HERSHEY_COMPLEX,0.5,(255, 255, 255),1,)
             cv2.imshow("im", frame)

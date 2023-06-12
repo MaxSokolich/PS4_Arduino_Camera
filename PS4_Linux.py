@@ -153,6 +153,7 @@ class MyController:
             
             #add action commands to queue
             self.queue.put(self.actions)
+            self.arduino.send(self.Bx,self.By,self.Bz, self.alpha, self.gamma, self.freq)
              
         
          
