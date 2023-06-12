@@ -1,4 +1,4 @@
-#import EasyPySpin
+import EasyPySpin
 import cv2
 from src.FPSCounter import FPSCounter
 from queue import Empty
@@ -18,7 +18,7 @@ class MyCamera:
         
         
         #connect to camera
-        cam = cv2.VideoCapture("/Users/bizzarohd/Desktop/spinningmanipulation2.mov")  #EasyPySpin.VideoCapture(0)
+        cam = EasyPySpin.VideoCapture(0)  #EasyPySpin.VideoCapture(0)
         w = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
         h = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 

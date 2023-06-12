@@ -1,7 +1,7 @@
 
 import multiprocessing
 
-from PS4 import MyController
+from PS4_Linux import MyController
 from Camera import MyCamera
 from Arduino import MyArduino
 
