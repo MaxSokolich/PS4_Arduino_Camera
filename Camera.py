@@ -26,7 +26,7 @@ class MyCamera:
         while True:
             self.fps_counter.update()
             try:
-                event = queue.get(0)   #match this with the tracker commands to save input output data.
+                actions = queue.get(0)   #match this with the tracker commands to save input output data.
                 
             except Empty:
                 pass
