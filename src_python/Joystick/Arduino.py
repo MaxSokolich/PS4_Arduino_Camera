@@ -72,7 +72,6 @@ class MyArduino:
             print(f"Closing connection at port {self.port}")
             self.send(0,0,0,0,0,0)
             self.conn.close()
-
             
 
 

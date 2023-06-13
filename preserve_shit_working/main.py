@@ -5,7 +5,7 @@
 import multiprocessing
 import threading
 
-from src_python.Joystick.PS4_Mac import MyController
+from PS4_Mac import MyController
 from Camera import MyCamera
 from Arduino import MyArduino
 

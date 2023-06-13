@@ -1,6 +1,6 @@
 #import EasyPySpin
 import cv2
-from src_python.Tracking.FPSCounter import FPSCounter
+from FPSCounter import FPSCounter
 from queue import Empty
 
 
@@ -37,10 +37,9 @@ class MyCamera:
                 actions = queue.get(0)   #match this with the tracker commands to save input output data.
                 Bx,By,Bz,Mx,My,Mz,alpha,gamma,freq,acoustic_status = actions
                 arduino.send(Bx,By,Bz,alpha,gamma,freq)
-                
+                pass
             except Empty:
-                print(2)
-                
+                pass
             
             success, frame = cam.read()
           

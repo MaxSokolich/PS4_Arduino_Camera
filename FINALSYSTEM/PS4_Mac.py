@@ -19,7 +19,7 @@ class MyController:
 
         #initilize class arguments
         self.queue = None
-        self.arduino = None
+    
 
     def deadzone(self, value):
         """
@@ -30,12 +30,12 @@ class MyController:
         else:
             return value
 
-    def run(self, arduino, queue):
+    def run(self,queue):
         """
         main controller event loop the listen for commands from the joystick
         once commands are found there are converted into the proper action format and sent to the queue.
         """
-        self.arduino = arduino
+
         self.queue = queue
 
         # Initialize the joystick
@@ -48,7 +48,7 @@ class MyController:
        
         # Main loop
         while True:
-            clock.tick(1000) #ms
+            clock.tick(70) #ms
             # Check for joystick events
             for event in pygame.event.get():
                 #axis condition
@@ -151,8 +151,11 @@ class MyController:
             
             #add action commands to queue
             self.queue.put(self.actions)
-            self.arduino.send(self.Bx,self.By,self.Bz, self.alpha, self.gamma, self.freq)
-             
+            #print(self.actions)
+            #self.arduino.send(self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.freq)
+
+
+  
         
          
            
