@@ -1,4 +1,2 @@
 # PS4_Arduino_Camera
-tempalte for all microrobotic exerpiements
-
-need to add electronic template of arduino, coils, and motor drivers
+some code for interfacing between a microscope camera ps4 controller and arduino
